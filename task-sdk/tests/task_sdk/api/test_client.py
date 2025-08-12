@@ -306,7 +306,7 @@ class TestTaskInstanceOperations:
     @pytest.mark.parametrize(
         "state", [state for state in TerminalTIState if state != TerminalTIState.SUCCESS]
     )
-    def test_task_instance_finish(self, state):
+    def test_task_instance_mark_failed(self, state):
         # Simulate a successful response from the server that finishes (moved to terminal state) a task
         ti_id = uuid6.uuid7()
 
@@ -322,7 +322,7 @@ class TestTaskInstanceOperations:
             return httpx.Response(status_code=400, json={"detail": "Bad Request"})
 
         client = make_client(transport=httpx.MockTransport(handle_request))
-        client.task_instances.finish(
+        client.task_instances.mark_failed(
             ti_id, state=state, when="2024-10-31T12:00:00Z", rendered_map_index="test"
         )
 
