@@ -914,7 +914,7 @@ class ActivitySubprocess(WatchedSubprocess):
         # For states like `deferred`, `up_for_reschedule`, the process will exit with 0, but the state will be updated
         # by the subprocess in the `handle_requests` method.
         if self.final_state not in STATES_SENT_DIRECTLY:
-            self.client.task_instances.finish(
+            self.client.task_instances.mark_failed(
                 id=self.id,
                 state=self.final_state,
                 when=datetime.now(tz=timezone.utc),
